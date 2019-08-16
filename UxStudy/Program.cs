@@ -11,19 +11,9 @@ namespace UxStudy
         {
             // Task 1
             Account johnAccount = GetAccount();
-            Console.WriteLine(Serialize(johnAccount));
-
-            // Task 2
-            string json = GetAccountJson();
-            Account janeAccount = Deserialize(json);
-            Console.WriteLine(janeAccount?.Email);
-            Console.WriteLine(janeAccount?.CreatedDate);
-            Console.WriteLine(janeAccount?.ID);
-
-            // Task 3
             Console.WriteLine(SerializeWithCompanyFormats(johnAccount));
 
-            // Task 4
+            // Task 2
             string compliantJson = GetCompliantAccountJson();
             Account jetAccount = DeserializeFromCompliantJson(compliantJson);
             Console.WriteLine(jetAccount?.Email);
@@ -34,34 +24,20 @@ namespace UxStudy
             Console.ReadLine();
         }
 
-        // TODO: 1) Serialize the "account" object to a JSON string and return it.
-        private static string Serialize(Account account)
-        {
-            // <Add/modify code here>
-            return "";
-        }
-
-        // TODO: 2) Deserialize the json string as an "account" object and return it.
-        private static Account Deserialize(string json)
-        {
-            // <Add/modify code here>
-            return null;
-        }
-
-        // The NotDet Company uses the following formats in their Account models:
+        // The Example Company uses the following formats in their Account models:
         // CreatedDate (DateTime): dd/MM/yy
         // ID (Guid): nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn (the "N" standard format specifier)
-        // TODO: 3) Serialize the "account" object to a company-compliant JSON string and return it.
+        // TODO: 1) Serialize the "account" object to a company-compliant JSON string and return it.
         private static string SerializeWithCompanyFormats(Account account)
         {
             // <Add/modify code here>
             return "";
         }
 
-        // The NotDet Company uses the following formats in their Account models:
+        // The Example Company uses the following formats in their Account models:
         // CreatedDate (DateTime): dd/MM/yy
         // ID (Guid): nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn (the "N" standard format specifier)
-        // TODO: 4) Deserialize the compliant json string as an "account" object and return it.
+        // TODO: 2) Deserialize the compliant json string as an "account" object and return it.
         private static Account DeserializeFromCompliantJson(string json)
         {
             // <Add/modify code here>
@@ -79,17 +55,6 @@ namespace UxStudy
             };
 
             return account;
-        }
-
-        private static string GetAccountJson()
-        {
-            // Note: Do NOT modify the Account JSON representation.
-            string json = @"{
-                ""Email"": ""jane@example.com"",
-                ""CreatedDate"": ""2019-08-17T00:00:00"",
-                ""ID"": ""f26a0e72-66b2-4ce4-b7db-e033943c3ad8""
-            }";
-            return json;
         }
 
         private static string GetCompliantAccountJson()

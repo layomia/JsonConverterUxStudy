@@ -12,24 +12,10 @@ namespace UxStudyAnswer
         {
             // Task 1
             Account johnAccount = GetAccount();
-            Console.WriteLine(Serialize(johnAccount));
-            // {"Email":"john@example.com","CreatedDate":"2019-08-16T00:00:00","ID":"20d8b3b1-1ffe-47c7-bc3c-26769b8eccd9"}
-
-            // Task 2
-            string json = GetAccountJson();
-            Account janeAccount = Deserialize(json);
-            Console.WriteLine(janeAccount?.Email);
-            // jane@example.com
-            Console.WriteLine(janeAccount?.CreatedDate);
-            // 8/17/2019 12:00:00 AM
-            Console.WriteLine(janeAccount?.ID);
-            // f26a0e72-66b2-4ce4-b7db-e033943c3ad8
-
-            // Task 3
-            Console.WriteLine(SerializeWithCompanyFormats(johnAccount));
+            Console.WriteLine(SerializeToCompliantJson(johnAccount));
             // {"Email":"john@example.com","CreatedDate":"08/16/2019","ID":"20d8b3b11ffe47c7bc3c26769b8eccd9"}
 
-            // Task 4
+            // Task 2
             string compliantJson = GetCompliantAccountJson();
             Account jetAccount = DeserializeFromCompliantJson(compliantJson);
             Console.WriteLine(jetAccount?.Email);
@@ -43,55 +29,39 @@ namespace UxStudyAnswer
             Console.ReadLine();
         }
 
-        // TODO: 1) Serialize the "account" object to a JSON string and return it.
-        private static string Serialize(Account account)
-        {
-            // 1a) Find the right API overload to call, with the correct signature
-            string jsonString = JsonSerializer.Serialize(account);
-            return jsonString;
-        }
-
-        // TODO: 2) Deserialize the json string as an "account" object and return it.
-        private static Account Deserialize(string json)
-        {
-            // 2a) Find the right API overload to call, with the correct signature
-            Account account = JsonSerializer.Deserialize<Account>(json);
-            return account;
-        }
-
-        // The NotDet Company uses the following formats in their Account models:
+        // The Example Company uses the following formats in their Account models:
         // CreatedDate (DateTime): dd/MM/yy
         // ID (Guid): nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn (the "N" standard format specifier)
-        // TODO: 3) Serialize the "account" object to a company-compliant JSON string and return it.
-        private static string SerializeWithCompanyFormats(Account account)
+        // TODO: 1) Serialize the "account" object to a company-compliant JSON string and return it.
+        private static string SerializeToCompliantJson(Account account)
         {
-            // 3a) Observe that default serialization formats differently.
+            // 1a) Observe that default serialization formats differently.
 
-            // 3b) Find the serializer option to add converters.
+            // 1b) Find the serializer option to add converters.
 
-            // 3c) Write and add converters to serializer options, then serialize with options.
+            // 1c) Write and add converters to serializer options, then serialize with options.
             JsonSerializerOptions options = new JsonSerializerOptions();
-            options.Converters.Add(new NotDetDateTimeConverter());
-            options.Converters.Add(new NotDetGuidConverter());
+            options.Converters.Add(new ExampleDateTimeConverter());
+            options.Converters.Add(new ExampleGuidConverter());
 
             string jsonString = JsonSerializer.Serialize(account, options);
             return jsonString;
         }
 
-        // The NotDet Company uses the following formats in their Account models:
+        // The Example Company uses the following formats in their Account models:
         // CreatedDate (DateTime): dd/MM/yy
         // ID (Guid): nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn (the "N" standard format specifier)
-        // TODO: 4) Deserialize the compliant json string as an "account" object and return it.
+        // TODO: 2) Deserialize the compliant json string as an "account" object and return it.
         private static Account DeserializeFromCompliantJson(string json)
         {
-            // 4a) Observe the exception thrown when trying to deserialize formats that are not natively supported by the serializer.
+            // 2a) Observe the exception thrown when trying to deserialize formats that are not natively supported by the serializer.
 
-            // 4b) Find the serializer option to add converters.
+            // 2b) Find the serializer option to add converters.
 
-            // 4c) Write and add converters to serializer options, then deserialize with options.
+            // 2c) Write and add converters to serializer options, then deserialize with options.
             JsonSerializerOptions options = new JsonSerializerOptions();
-            options.Converters.Add(new NotDetDateTimeConverter());
-            options.Converters.Add(new NotDetGuidConverter());
+            options.Converters.Add(new ExampleDateTimeConverter());
+            options.Converters.Add(new ExampleGuidConverter());
 
             Account account = JsonSerializer.Deserialize<Account>(json, options);
             return account;
@@ -108,16 +78,6 @@ namespace UxStudyAnswer
             };
 
             return account;
-        }
-
-        private static string GetAccountJson()
-        {
-            string json = @"{
-                ""Email"": ""jane@example.com"",
-                ""CreatedDate"": ""2019-08-17T00:00:00"",
-                ""ID"": ""f26a0e72-66b2-4ce4-b7db-e033943c3ad8""
-            }";
-            return json;
         }
 
         private static string GetCompliantAccountJson()
@@ -140,7 +100,7 @@ namespace UxStudyAnswer
 
     // Alternate solution is to create a single custom converter for the Account object.
 
-    public class NotDetDateTimeConverter : JsonConverter<DateTime>
+    public class ExampleDateTimeConverter : JsonConverter<DateTime>
     {
         public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
@@ -154,7 +114,7 @@ namespace UxStudyAnswer
         }
     }
 
-    public class NotDetGuidConverter : JsonConverter<Guid>
+    public class ExampleGuidConverter : JsonConverter<Guid>
     {
         public override Guid Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
